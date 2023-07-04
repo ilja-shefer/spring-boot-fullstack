@@ -29,18 +29,18 @@ services:
     restart: unless-stopped
     depends_on:
       - db
-#  customer-api-test:
-#    container_name: customer-api
-#    image: sheferdeveloper/customer-api
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - postgres
-#    depends_on:
-#      - db
-#    restart: unless-stopped
+  customer-api-test:
+    container_name: customer-api
+    image: sheferdeveloper/customer-api
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
+    ports:
+      - "8080:8080"
+    networks:
+      - db
+    depends_on:
+      - db
+    restart: unless-stopped
 
 networks:
   db:
