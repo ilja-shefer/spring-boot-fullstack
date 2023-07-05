@@ -14,13 +14,13 @@
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
 
-	<organization>
-		<name>sheferdeveloper</name>
-	</organization>
-
 	<properties>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
+		<docker.username>sheferdeveloper</docker.username>
+		<docker.image.name>customer-api</docker.image.name>
+		<docker.image.tag/>
+
 	</properties>
 
 	<dependencies>
@@ -175,7 +175,7 @@
 						</platforms>
 					</from>
 					<to>
-						<image>docker.io/${organization.name}/${project.artifactId}:${project.version}</image>
+						<image>docker.io/${docker.username}/${docker.image.name}:${docker.image.tag}</image>
 						<tags>
 							<tag>latest</tag>
 						</tags>
