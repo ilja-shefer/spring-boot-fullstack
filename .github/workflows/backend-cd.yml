@@ -67,7 +67,9 @@ jobs:
       - name: Commit and push Dockerrun.aws.json
         run: |
           git config user.name github-actions
+          echo "Git User Name: $USER_NAME"
           git config user.email github-actions@github.com
+          echo "Git User Email: $USER_EMAIL"
           git add .
           git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
           git push
