@@ -20,7 +20,6 @@
 		<docker.username>sheferdeveloper</docker.username>
 		<docker.image.name>customer-api</docker.image.name>
 		<docker.image.tag/>
-
 	</properties>
 
 	<dependencies>
