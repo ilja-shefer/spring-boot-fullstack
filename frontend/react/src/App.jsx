@@ -1,59 +1,61 @@
 import SidebarWithHeader from "./components/shared/SideBar.jsx";
-import { Wrap, WrapItem, Spinner, Text} from "@chakra-ui/react";
+import { Wrap, WrapItem, Spinner, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import {getCustomers} from "./services/client.js";
+import { getCustomers } from "./services/client.js";
 import CardWithImage from "./components/Card.jsx";
 
 function App() {
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    const [customers, setCustomers] = useState([]);
-    const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      getCustomers()
+        .then((res) => {
+          setCustomers(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }, 3000);
+  }, []);
 
-    useEffect(() => {
-        setLoading(true);
-        setTimeout(() => {
-            getCustomers().then(res => {
-                setCustomers(res.data);
-            }).catch(err => {
-                console.log(err);
-            }).finally(() => {
-                setLoading(false);
-            });
-        }, 3000);
-    }, []);
-
-    if(loading) {
-        return (
-            <SidebarWithHeader>
-                <Spinner
-                    thickness='4px'
-                    speed='0.65s'
-                    emptyColor='gray.200'
-                    color='blue.500'
-                    size='xl'
-                />
-            </SidebarWithHeader>
-        )
-    }
-
-    if(customers.length <= 0) {
-        return (
-            <SidebarWithHeader>
-                <Text>No customers available</Text>
-            </SidebarWithHeader>
-        )
-    }
-
+  if (loading) {
     return (
       <SidebarWithHeader>
-          <Wrap justify={"center"} spacing={"30"}>
-              {customers.map((customer, index) => (
-                      <WrapItem key={index}>
-                          <CardWithImage {...customer}/>
-                      </WrapItem>
-              ))}
-          </Wrap>
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
       </SidebarWithHeader>
     );
+  }
+
+  if (customers.length <= 0) {
+    return (
+      <SidebarWithHeader>
+        <Text>No customers available</Text>
+      </SidebarWithHeader>
+    );
+  }
+
+  return (
+    <SidebarWithHeader>
+      <Wrap justify={"center"} spacing={"30"}>
+        {customers.map((customer, index) => (
+          <WrapItem key={index}>
+            <CardWithImage {...customer} imageNumber={index} />
+          </WrapItem>
+        ))}
+      </Wrap>
+    </SidebarWithHeader>
+  );
 }
-export default App
+export default App;

@@ -45,8 +45,8 @@ class CustomerServiceTest {
                 id,
                 "Alex",
                 "alex@gmail.com",
-                19
-        );
+                19,
+                Gender.MALE);
 
         when(customerDao.selectCustomerById(id))
                 .thenReturn(Optional.of(customer));
@@ -83,7 +83,7 @@ class CustomerServiceTest {
         when(customerDao.existsPersonWithEmail(email))
                 .thenReturn(false);
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                "Alex", email, 19
+                "Alex", email, 19, Gender.MALE
         );
 
         //When
@@ -111,7 +111,7 @@ class CustomerServiceTest {
         when(customerDao.existsPersonWithEmail(email))
                 .thenReturn(true);
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                "Alex", email, 19
+                "Alex", email, 19, Gender.MALE
         );
 
         //When
@@ -161,8 +161,8 @@ class CustomerServiceTest {
                 id,
                 "Alex",
                 "alex@gmail.com",
-                19
-        );
+                19,
+                Gender.MALE);
 
         when(customerDao.selectCustomerById(id))
                 .thenReturn(Optional.of(customer));
@@ -197,8 +197,8 @@ class CustomerServiceTest {
                 id,
                 "Alex",
                 "alex@gmail.com",
-                19
-        );
+                19,
+                Gender.MALE);
 
         when(customerDao.selectCustomerById(id))
                 .thenReturn(Optional.of(customer));
@@ -230,8 +230,8 @@ class CustomerServiceTest {
                 id,
                 "Alex",
                 "alex@gmail.com",
-                19
-        );
+                19,
+                Gender.MALE);
 
         when(customerDao.selectCustomerById(id))
                 .thenReturn(Optional.of(customer));
@@ -266,8 +266,8 @@ class CustomerServiceTest {
                 id,
                 "Alex",
                 "alex@gmail.com",
-                19
-        );
+                19,
+                Gender.MALE);
 
         when(customerDao.selectCustomerById(id))
                 .thenReturn(Optional.of(customer));
@@ -298,8 +298,8 @@ class CustomerServiceTest {
                 id,
                 "Alex",
                 "alex@gmail.com",
-                19
-        );
+                19,
+                Gender.MALE);
 
         when(customerDao.selectCustomerById(id))
                 .thenReturn(Optional.of(customer));
@@ -330,8 +330,8 @@ class CustomerServiceTest {
                 id,
                 "Alex",
                 "alex@gmail.com",
-                19
-        );
+                19,
+                Gender.MALE);
 
         when(customerDao.selectCustomerById(id))
                 .thenReturn(Optional.of(customer));

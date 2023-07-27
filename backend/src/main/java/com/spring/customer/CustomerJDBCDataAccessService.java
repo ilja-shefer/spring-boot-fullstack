@@ -12,7 +12,8 @@ public class CustomerJDBCDataAccessService implements CustomerDao{
     private final JdbcTemplate jdbcTemplate;
     private final CustomerRowMapper customerRowMapper;
 
-    public CustomerJDBCDataAccessService(JdbcTemplate jdbcTemplate, CustomerRowMapper customerRowMapper) {
+    public CustomerJDBCDataAccessService(JdbcTemplate jdbcTemplate,
+                                         CustomerRowMapper customerRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.customerRowMapper = customerRowMapper;
     }
@@ -20,7 +21,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao{
     @Override
     public List<Customer> selectAllCustomers() {
         var sql = """
-                SELECT id, name, email, age
+                SELECT id, name, email, age, gender
                 FROM customer
                 """;
 
@@ -30,27 +31,33 @@ public class CustomerJDBCDataAccessService implements CustomerDao{
     @Override
     public Optional<Customer> selectCustomerById(Integer id) {
         var sql = """
-                SELECT id, name, email, age 
-                FROM customer 
+                SELECT id, name, email, age, gender
+                FROM customer
                 WHERE id = ?
                 """;
         /*Customer customer = jdbcTemplate.queryForObject(sql, new Object[] {id}, customerRowMapper);
         return Optional.of(customer);*/
 
-        return jdbcTemplate.query(sql, customerRowMapper, id).stream().findFirst();
+        return jdbcTemplate.query(sql, customerRowMapper, id)
+                .stream()
+                .findFirst();
     }
 
     @Override
     public void insertCustomer(Customer customer) {
         var sql = """
-                INSERT INTO customer(name, email, age) 
-                VALUES (?, ?, ?)
+                INSERT INTO customer(name, email, age, gender)
+                VALUES (?, ?, ?, ?)
                 """;
-        int result = jdbcTemplate.update(sql,
+        int result = jdbcTemplate.update(
+                sql,
                 customer.getName(),
                 customer.getEmail(),
-                customer.getAge());
-        System.out.println("jdbcTemplate.update = " + result);
+                customer.getAge(),
+                customer.getGender().name()
+        );
+
+        System.out.println("insertCustomer result " + result);
     }
 
     @Override
@@ -78,33 +85,37 @@ public class CustomerJDBCDataAccessService implements CustomerDao{
         var sql = """
                 DELETE FROM customer WHERE id = ?;
                 """;
-        jdbcTemplate.update(sql, id);
+        int result = jdbcTemplate.update(sql, id);
+        System.out.println("deleteCustomerById result = " + result);
     }
 
     @Override
     public void updateCustomer(Customer update) {
-       if(update.getName() != null) {
-           String sql = """
-                   UPDATE customer  SET name = ? WHERE id = ?;
-                   """;
-           int result = jdbcTemplate.update(sql, update.getName(), update.getId());
-           System.out.println("update customer name result = " + result);
-       }
-
-       if(update.getAge() != null) {
-           String sql = """
-                   UPDATE customer SET age = ? WHERE id = ?;
-                   """;
-           int result = jdbcTemplate.update(sql, update.getAge(), update.getId());
-           System.out.println("update customer age result = " + result);
-       }
-
-       if(update.getEmail() != null) {
-           String sql = """
-                   UPDATE customer SET email = ? WHERE id = ?;
-                   """;
-           int result = jdbcTemplate.update(sql, update.getEmail(), update.getId());
-           System.out.println("update customer email result = " + result);
-       }
+        if (update.getName() != null) {
+            String sql = "UPDATE customer SET name = ? WHERE id = ?";
+            int result = jdbcTemplate.update(
+                    sql,
+                    update.getName(),
+                    update.getId()
+            );
+            System.out.println("update customer name result = " + result);
+        }
+        if (update.getAge() != null) {
+            String sql = "UPDATE customer SET age = ? WHERE id = ?";
+            int result = jdbcTemplate.update(
+                    sql,
+                    update.getAge(),
+                    update.getId()
+            );
+            System.out.println("update customer age result = " + result);
+        }
+        if (update.getEmail() != null) {
+            String sql = "UPDATE customer SET email = ? WHERE id = ?";
+            int result = jdbcTemplate.update(
+                    sql,
+                    update.getEmail(),
+                    update.getId());
+            System.out.println("update customer email result = " + result);
+        }
     }
 }

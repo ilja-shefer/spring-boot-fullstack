@@ -53,8 +53,8 @@ class CustomerJPADataAccessServiceTest {
                 1,
                 "fake fake",
                 "test@gmail.com",
-                20
-        );
+                20,
+                Gender.MALE);
 
         //When
         underTest.insertCustomer(actual);
@@ -109,8 +109,8 @@ class CustomerJPADataAccessServiceTest {
                 1,
                 "fake fake",
                 "test@gmail.com",
-                20
-        );
+                20,
+                Gender.MALE);
 
         //When
         underTest.updateCustomer(actual);
