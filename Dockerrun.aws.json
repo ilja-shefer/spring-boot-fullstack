@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "customer-api",
-      "image": "sheferdeveloper/customer-api:03.08.2023.14.02.11",
+      "image": "sheferdeveloper/customer-api:latest",
       "essential": true,
       "memory": 512,
       "portMappings": [
@@ -15,7 +15,7 @@
       "environment": [
         {
           "name": "SPRING_DATASOURCE_URL",
-          "value": "jdbc:postgresql://awseb-e-qspp9uta2p-stack-awsebrdsdatabase-vfnebe88gnqj.c30hos7eudyp.eu-central-1.rds.amazonaws.com:5432/customer"
+          "value": "jdbc:postgresql://awseb-e-s8e3jcbb58-stack-awsebrdsdatabase-mnl3dlei9pes.c30hos7eudyp.eu-central-1.rds.amazonaws.com:5432/customer"
         }
       ]
     }
