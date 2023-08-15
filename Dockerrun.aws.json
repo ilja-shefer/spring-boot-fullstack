@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "customer-api",
-      "image": "sheferdeveloper/customer-api:latest",
+      "image": "sheferdeveloper/customer-api:15.08.2023.16.09.29",
       "essential": true,
       "memory": 512,
       "portMappings": [
