@@ -1,4 +1,4 @@
-name: CD - Deploy Frontend
+name: CD - Deploy React Frontend
 
 on:
   workflow_dispatch:
@@ -11,12 +11,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version:
-          - 18.x
-
     defaults:
       run:
         working-directory: ./frontend/react
@@ -33,41 +27,27 @@ jobs:
           curl -X POST -H 'Content-type: application/json'
           --data '{"text":"Deployment started :progress_bar: :fingerscrossed:"}' 
           ${{ secrets.SLACK_WEBHOOK_URL }}
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: |
-          npm install
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Set build number
+        id: build-number
+        run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-
-      - name: Set build number
-        id: build-number
-        run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
-      - name: Send Slack Message
-        run: >
-          curl -X POST -H 'Content-type: application/json' 
-          --data '{"text":":container: Building docker container with dockerfile"}' 
-          ${{ secrets.SLACK_WEBHOOK_URL }}
-      - name: Build Package Push with Dockerfile
+      - name: Docker Build and push
         run: |
           docker buildx create --name mybuilder
           docker buildx use mybuilder
           docker buildx build --platform linux/amd64,linux/arm64 . -t sheferdeveloper/customer-react:${{steps.build-number.outputs.BUILD_NUMBER}} \
           --build-arg api_base_url=${{ secrets.DOCKER_ENV_VAR }}:8080 \
           --push
+      - name: Send Slack Message
+        run: >
+          curl -X POST -H 'Content-type: application/json' 
+          --data '{"text":":docker: Image tag:${{steps.build-number.outputs.BUILD_NUMBER}} pushed to https://hub.docker.com/repository/docker/sheferdeveloper/customer-api"}' 
+          ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Update Dockerrun.aws.json api image tag with new build number
         run: |
           echo "Dockerrun.aws.json before updating tag"
@@ -91,6 +71,7 @@ jobs:
           version_description: ${{ github.SHA }}
           region: ${{ secrets.EB_REGION }}
           deployment_package: Dockerrun.aws.json
+          wait_for_environment_recovery: 60
       - name: Send Slack Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
@@ -114,4 +95,10 @@ jobs:
           curl -X POST -H 'Content-type: application/json' 
           --data '{"text":"Job Status ${{ job.status }}"}' 
           ${{ secrets.SLACK_WEBHOOK_URL }} 
+      
+
+
+      
+
+      
 
